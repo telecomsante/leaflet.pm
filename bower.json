@@ -4,17 +4,7 @@
   "authors": [
     "Sumit Kumar <sk@outlook.com>"
   ],
-  "description": "",
-  "moduleType": [],
-  "license": "MIT",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
-  "devDependencies": {
+  "dependencies": {
     "leaflet.pm": "^0.5.8"
   }
 }
