@@ -1,0 +1,20 @@
+{
+  "name": "leaflet.pm demo",
+  "homepage": "https://github.com/codeofsumit/leaflet.pm",
+  "authors": [
+    "Sumit Kumar <sk@outlook.com>"
+  ],
+  "description": "",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "leaflet.pm": "^0.5.8"
+  }
+}
