@@ -10,6 +10,13 @@ html, body {
     margin: 0;
 }
 
+pre {
+    background-color: #F7F7F7;
+    font-family: monospace;
+    font-size: .8em;
+    padding: 5px;
+}
+
 h1, h2, h3, h4, h5 {
     font-weight: normal;
 }

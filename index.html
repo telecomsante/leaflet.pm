@@ -21,7 +21,7 @@
                 <h2>Getting Started</h2>
                 <h4>Install via Bower</h4>
                 <p>
-                    bower install leaflet.pm --save
+                    <pre>bower install leaflet.pm --save</pre>
                 </p>
                 <h4>Install Manually</h4>
                 <p>
@@ -39,7 +39,15 @@
                 <h3>How it works</h3>
                 <p>
                     To enable drawing of polygons, simply add the controls to the map with <br/>
-                    L.PM.addControls(map2);
+                    <pre>map.pm.addControls();</pre>
+                </p>
+                <p>
+                    Enable drawing mode manually with<br/>
+                    <pre>map.pm.enableDraw('Poly');</pre>
+                </p>
+                <p>
+                    Disable drawing mode manually with<br/>
+                    <pre>map.pm.disableDraw();</pre>
                 </p>
             </article>
             <article>
@@ -53,7 +61,9 @@
                 <div class="map" id="example3"></div>
                 <h3>How it works</h3>
                 <p>
-                    With polygon.pm.toggleEdit() you can toggle the edit mode for any polygon on the map.<br/>
+                    With
+                    <pre>polygon.pm.toggleEdit();</pre>
+                    you can toggle the edit mode for any polygon on the map.<br/>
                     Put it whereever you want. For example inside a click handler on a button or the polygon itself.<br/>
                 </p>
             </article>
@@ -67,7 +77,9 @@
                 <div class="map" id="example4"></div>
                 <h3>How it works</h3>
                 <p>
-                    With layerGroup.pm.toggleEdit() you can toggle the edit mode for any layerGroup on the map.
+                    With
+                    <pre>layerGroup.pm.toggleEdit();</pre>
+                    you can toggle the edit mode for any layerGroup on the map.
                 </p>
             </article>
         </div>
