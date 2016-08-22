@@ -17,6 +17,8 @@ L.PM.Edit.Poly = L.Class.extend({
 
         var self = this;
 
+        this._options = options;
+
         if(!this.enabled()) {
             // change state
             this._enabled = true;
@@ -38,13 +40,14 @@ L.PM.Edit.Poly = L.Class.extend({
             });
 
             // apply options
-            if(!options) {
+            if(!this._options) {
                 return;
             }
 
-            if(options.draggable) {
+            if(this._options.draggable) {
                 this._initDraggableLayer();
             }
+
         }
 
     },
@@ -128,6 +131,22 @@ L.PM.Edit.Poly = L.Class.extend({
 
     },
 
+    _checkOverlap: function(point) {
+        var that = this;
+        var map = this._poly._map;
+        var latLng = L.latLng(point.lat, point.lng);
+
+        console.log(latLng);
+        console.log(this._poly);
+
+        map.eachLayer(function() {
+            var inside = that._poly.getBounds().contains(latLng);
+            if(inside) {
+                console.log(inside);
+            }
+        });
+    },
+
     _onLayerDrag: function(e) {
 
         var that = this;
@@ -154,6 +173,8 @@ L.PM.Edit.Poly = L.Class.extend({
                 lat: currentLatLng.lat + deltaLatLng.lat,
                 lng: currentLatLng.lng + deltaLatLng.lng
             }
+
+            that._checkOverlap(newLatLng);
 
             // set latLng of marker
             marker.setLatLng(newLatLng);
