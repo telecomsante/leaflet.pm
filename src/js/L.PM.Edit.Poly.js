@@ -34,7 +34,7 @@ L.PM.Edit.Poly = L.Class.extend({
             // add markerGroup to map
             this._poly._map.addLayer(this._markerGroup);
 
-            // if polygon gets removed from map, disable edit mode
+            // if polygon gets removed fwrom map, disable edit mode
             this._poly.on('remove', function() {
                 self.disable();
             });
@@ -133,18 +133,18 @@ L.PM.Edit.Poly = L.Class.extend({
 
     _checkOverlap: function(point) {
         var that = this;
-        var map = this._poly._map;
         var latLng = L.latLng(point.lat, point.lng);
 
-        console.log(latLng);
-        console.log(this._poly);
+        var layers = this._layerGroup.getLayers();
 
-        map.eachLayer(function() {
-            var inside = that._poly.getBounds().contains(latLng);
-            if(inside) {
+        for(var i=0; i<layers.length; i++) {
+
+            if(layers[i] !== this._poly) {
+                var inside = layers[i].getBounds().contains(latLng);
                 console.log(inside);
             }
-        });
+        }
+
     },
 
     _onLayerDrag: function(e) {
