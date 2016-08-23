@@ -149,9 +149,10 @@ L.PM.Edit.Poly = L.Class.extend({
         return inside;
     },
 
-    _checkOverlap: function(marker) {
+    _checkOwnOverlap: function(marker) {
 
-        var that = this;
+        // checks if the marker is inside any other polygon of the layergroup
+        // TODO: check if everything works when the poly has no layergroup
 
         var layers = this._layerGroup.getLayers();
         var inside = false;
@@ -161,17 +162,47 @@ L.PM.Edit.Poly = L.Class.extend({
             var layer = layers[l];
 
             if(layer !== this._poly) {
-
                 inside = this._isPointInside(marker, layer);
-                console.log(inside);
-
+                if(inside) {
+                    break;
+                }
             }
-
 
         }
 
-
         return inside;
+
+    },
+
+    _checkOtherOverlap: function() {
+
+        var layers = this._layerGroup.getLayers();
+
+        var inside = false;
+        var theEnemyMarker = false;
+
+        for(var l = 0; l < layers.length; l++) {
+
+            var layer = layers[l];
+
+            if(layer !== this._poly) {
+
+                var markers = layer.pm._markerGroup.getLayers();
+
+                for(var i = 0; i < markers.length; i++) {
+                    inside = this._isPointInside(markers[i], this._poly);
+
+                    if(inside) {
+                        theEnemyMarker = markers[i];
+                        break;
+                    }
+                }
+
+            }
+
+        }
+
+        return theEnemyMarker;
 
     },
 
@@ -386,12 +417,25 @@ L.PM.Edit.Poly = L.Class.extend({
         var prevMarkerIndex = marker._index - 1 < 0 ? this._markers.length - 1 : marker._index - 1;
 
 
-        this._checkOverlap(marker);
+        if(this._checkOwnOverlap(marker)) {
 
+            // update marker coordinates which will update polygon coordinates
+            L.extend(marker._latlng, marker._origLatLng);
+            this._poly.redraw();
 
-        // update marker coordinates which will update polygon coordinates
-        L.extend(marker._origLatLng, marker._latlng);
-        this._poly.redraw();
+            return false;
+        } else {
+            // update marker coordinates which will update polygon coordinates
+            L.extend(marker._origLatLng, marker._latlng);
+            this._poly.redraw();
+        };
+
+        var enemyMarker = this._checkOtherOverlap();
+
+        if(!!enemyMarker) {
+            this._createMarker(enemyMarker.getLatLng(), 1);
+        }
+
 
         // update middle markers on the left and right
         // be aware that "left" and "right" might be interchanged, depending on the geojson array
