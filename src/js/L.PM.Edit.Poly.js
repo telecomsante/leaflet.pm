@@ -131,19 +131,47 @@ L.PM.Edit.Poly = L.Class.extend({
 
     },
 
-    _checkOverlap: function(point) {
+    _isPointInside: function(marker, poly) {
+
+        var polyPoints = poly.getLatLngs()[0];
+        var x = marker.getLatLng().lat, y = marker.getLatLng().lng;
+
+        var inside = false;
+        for (var i = 0, j = polyPoints.length - 1; i < polyPoints.length; j = i++) {
+            var xi = polyPoints[i].lat, yi = polyPoints[i].lng;
+            var xj = polyPoints[j].lat, yj = polyPoints[j].lng;
+
+            var intersect = ((yi > y) != (yj > y))
+                && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+            if (intersect) inside = !inside;
+        }
+
+        return inside;
+    },
+
+    _checkOverlap: function(marker) {
+
         var that = this;
-        var latLng = L.latLng(point.lat, point.lng);
 
         var layers = this._layerGroup.getLayers();
+        var inside = false;
 
-        for(var i=0; i<layers.length; i++) {
+        for(var l = 0; l < layers.length; l++) {
 
-            if(layers[i] !== this._poly) {
-                var inside = layers[i].getBounds().contains(latLng);
+            var layer = layers[l];
+
+            if(layer !== this._poly) {
+
+                inside = this._isPointInside(marker, layer);
                 console.log(inside);
+
             }
+
+
         }
+
+
+        return inside;
 
     },
 
@@ -173,8 +201,6 @@ L.PM.Edit.Poly = L.Class.extend({
                 lat: currentLatLng.lat + deltaLatLng.lat,
                 lng: currentLatLng.lng + deltaLatLng.lng
             }
-
-            that._checkOverlap(newLatLng);
 
             // set latLng of marker
             marker.setLatLng(newLatLng);
@@ -358,6 +384,10 @@ L.PM.Edit.Poly = L.Class.extend({
         // the dragged markers neighbors
         var nextMarkerIndex = marker._index + 1 >= this._markers.length ? 0 : marker._index + 1;
         var prevMarkerIndex = marker._index - 1 < 0 ? this._markers.length - 1 : marker._index - 1;
+
+
+        this._checkOverlap(marker);
+
 
         // update marker coordinates which will update polygon coordinates
         L.extend(marker._origLatLng, marker._latlng);
