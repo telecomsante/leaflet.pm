@@ -1,5 +1,10 @@
 var map2 = L.map('example2').setView([51.505, -0.09], 13);
 
+map2.on('pm:create', function(e) {
+    alert('pm:create event fired. See console for details');
+    console.log(e);
+});
+
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map2);
@@ -66,12 +71,29 @@ var geoJsonData = {
     ]
 };
 var geoJsonButton = document.getElementById('test-geojson');
-var geoJsonLayer = L.geoJson(geoJsonData).addTo(map3);
-geoJsonLayer.pm.toggleEdit();
+var geoJsonLayer = L.geoJson().addTo(map3);
+geoJsonLayer.addData(geoJsonData);
+geoJsonLayer.pm.toggleEdit({
+    draggable: true
+});
 var bounds = geoJsonLayer.getBounds();
 map3.fitBounds(bounds);
 geoJsonLayer.addEventListener('click', function() {
     geoJsonLayer.pm.toggleEdit();
+});
+
+geoJsonLayer.on('pm:edit', function(e) {
+    console.log(e);
+});
+
+geoJsonLayer.on('pm:dragstart', function(e) {
+    console.log(e);
+});
+geoJsonLayer.on('pm:drag', function(e) {
+    // console.log(e);
+});
+geoJsonLayer.on('pm:dragend', function(e) {
+    console.log(e);
 });
 
 
@@ -98,5 +120,39 @@ var layerGroupItem2 = L.polygon([
     [51.52, -0.05]
 ]);
 
-var layerGroup = L.layerGroup([layerGroupItem1, layerGroupItem2]).addTo(map4);
-layerGroup.pm.toggleEdit();
+var layerGroupItem3 = L.polygon([
+  [
+    51.51549835365031,
+    -0.06450164634969281
+  ],
+  [
+    51.51944818307178,
+    -0.08425079345703125
+  ],
+  [
+    51.51868369995795,
+    -0.06131630004205801
+  ],
+  [
+    51.51549835365031,
+    -0.06450164634969281
+  ]
+]);
+
+var layerGroup = L.featureGroup([layerGroupItem1, layerGroupItem2]).addTo(map4);
+layerGroup.pm.toggleEdit({
+    draggable: true,
+    preventOverlap: true
+});
+
+layerGroup.addLayer(layerGroupItem3);
+
+layerGroup.on('pm:dragstart', function(e) {
+    console.log(e);
+});
+layerGroup.on('pm:drag', function(e) {
+    console.log(e);
+});
+layerGroup.on('pm:dragend', function(e) {
+    console.log(e);
+});
