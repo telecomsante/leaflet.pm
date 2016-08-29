@@ -79,15 +79,15 @@ L.PM.Draw.Poly = L.PM.Draw.extend({
         var self = this;
 
         var drawPolyButton = {
-              'className': 'icon-polygon',
-              'onClick': function() {
+            'className': 'icon-polygon',
+            'onClick': function() {
 
-              },
-              'afterClick': function(e) {
-                  self.toggle();
-              },
-              'doToggle': true,
-              'toggleStatus': false
+            },
+            'afterClick': function(e) {
+                self.toggle();
+            },
+            'doToggle': true,
+            'toggleStatus': false
         };
 
         this._drawButton = new L.Control.PMButton(drawPolyButton).addTo(this._map);

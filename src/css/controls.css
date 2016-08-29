@@ -19,7 +19,10 @@
 }
 
 .leaflet-buttons-control-button img.icon-polygon {
-  content: url('assets/icons/polygon.png');
+  content: url('assets/icons/draw.png');
+}
+.leaflet-buttons-control-button img.icon-remove {
+  content: url('assets/icons/remove.png');
 }
 
 .leaflet-buttons-control-button:hover {
