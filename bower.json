@@ -5,6 +5,6 @@
     "Sumit Kumar <sk@outlook.com>"
   ],
   "dependencies": {
-    "leaflet.pm": "^0.7.0"
+    "leaflet.pm": "^0.7.1"
   }
 }
