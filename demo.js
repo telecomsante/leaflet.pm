@@ -24,6 +24,8 @@ L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 map2.pm.addControls();
 map2.pm.enableDraw('Poly');
 
+map4.pm.addControls();
+
 // GEOSJON EXAMPLE
 
 var geoJsonData = {
@@ -79,7 +81,9 @@ geoJsonLayer.pm.toggleEdit({
 var bounds = geoJsonLayer.getBounds();
 map3.fitBounds(bounds);
 geoJsonLayer.addEventListener('click', function() {
-    geoJsonLayer.pm.toggleEdit();
+    geoJsonLayer.pm.toggleEdit({
+        draggable: true
+    });
 });
 
 geoJsonLayer.on('pm:edit', function(e) {
@@ -141,8 +145,7 @@ var layerGroupItem3 = L.polygon([
 
 var layerGroup = L.featureGroup([layerGroupItem1, layerGroupItem2]).addTo(map4);
 layerGroup.pm.toggleEdit({
-    draggable: true,
-    preventOverlap: true
+    draggable: true
 });
 
 layerGroup.addLayer(layerGroupItem3);
