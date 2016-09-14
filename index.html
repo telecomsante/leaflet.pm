@@ -2,13 +2,35 @@
 <html>
     <head>
         <title>Leaflet Polygon Management Demo</title>
-        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v1.0.0-beta.2/leaflet.css" />
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v1.0.0-rc.3/leaflet.css" />
+        <!--<link rel="stylesheet" href="dist/leaflet.pm.css" />-->
         <link rel="stylesheet" href="demo/demo.css" />
-        <script src="http://cdn.leafletjs.com/leaflet/v1.0.0-beta.2/leaflet.js"></script>
-        <script src="dist/leaflet.pm.min.js"></script>
+        <link rel="stylesheet" href="src/css/controls.css" />
+        <link rel="stylesheet" href="src/css/layers.css" />
+        <script src="http://cdn.leafletjs.com/leaflet/v1.0.0-rc.3/leaflet.js"></script>
+        <!--<script src="dist/leaflet.pm.min.js"></script>-->
+        <script src="src/js/L.PM.js"></script>
+        <script src="src/js/L.PM.Map.js"></script>
+        <script src="src/js/Mixins/Drag.js"></script>
+        <script src="src/js/Mixins/Overlap.js"></script>
+        <script src="src/js/Mixins/Snapping.js"></script>
+        <script src="src/js/Toolbar/L.PM.Toolbar.js"></script>
+        <script src="src/js/Toolbar/L.Controls.js"></script>
+        <script src="src/js/Draw/L.PM.Draw.js"></script>
+        <script src="src/js/Draw/L.PM.Draw.Poly.js"></script>
+        <script src="src/js/Edit/L.PM.Edit.js"></script>
+        <script src="src/js/Edit/L.PM.Edit.LayerGroup.js"></script>
+        <script src="src/js/Edit/L.PM.Edit.Poly.js"></script>
     </head>
     <body>
-
+        <style>
+        #map {
+            height:400px;
+        }
+        aside {
+            display:none;
+        }
+        </style>
         <div class="wrapper">
             <aside>
                 <h1>Leaflet.PM</h1>
@@ -44,7 +66,7 @@
 
         </div>
 
-        <script src="demo/demo.js"></script>
+        <script src="test.js"></script>
 
     </body>
 </html>
