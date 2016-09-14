@@ -4,10 +4,11 @@
 
 L.PM.Toolbar = L.Class.extend({
     options: {
+        drawPolyline: true,
         drawPolygon: true,
         editPolygon: true,
         dragPolygon: false,
-        deleteLayer: true
+        deleteLayer: true,
     },
     initialize(map) {
         this.map = map;
@@ -76,6 +77,20 @@ L.PM.Toolbar = L.Class.extend({
             'disableOtherButtons': true
         };
 
+        var drawLineButton = {
+             'className': 'icon-line',
+             'onClick': (e) => {
+
+             },
+             'afterClick': (e) => {
+                 // toggle drawing mode
+                 console.log('afterClick polyline');
+             },
+             'doToggle': true,
+             'toggleStatus': false,
+             'disableOtherButtons': true
+        };
+
         var drawPolyButton = {
              'className': 'icon-polygon',
              'onClick': (e) => {
@@ -117,6 +132,7 @@ L.PM.Toolbar = L.Class.extend({
              'disableOtherButtons': true
         };
 
+        this._addButton('drawPolyline', new L.Control.PMButton(drawLineButton));
         this._addButton('drawPolygon', new L.Control.PMButton(drawPolyButton));
         this._addButton('editPolygon', new L.Control.PMButton(editButton));
         this._addButton('dragPolygon', new L.Control.PMButton(dragButton));
