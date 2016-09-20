@@ -1,6 +1,6 @@
 var SnapMixin = {
     _initSnappableMarkers: function() {
-
+        let PMObj = this._poly || this._line;
         this.options.snapDistance = this.options.snapDistance || 30;
 
         this._markers.forEach((marker) => {
@@ -13,8 +13,8 @@ var SnapMixin = {
         });
 
 
-        this._poly.off('pm:dragstart', this._unsnap, this);
-        this._poly.on('pm:dragstart', this._unsnap, this);
+        PMObj.off('pm:dragstart', this._unsnap, this);
+        PMObj.on('pm:dragstart', this._unsnap, this);
 
     },
     _unsnap: function(e) {
@@ -32,7 +32,8 @@ var SnapMixin = {
         });
     },
     _handleSnapping: function(e) {
-
+        let PMObj = this._poly || this._line;
+      
         // create a list of polygons that the marker could snap to
         // this isn't inside a movestart/dragstart callback because middlemarkers are initialized
         // after dragstart/movestart so it wouldn't fire for them
@@ -61,7 +62,7 @@ var SnapMixin = {
             marker,
             snapLatLng,
             segment: closestLayer.segment,
-            layer: this._poly,
+            layer: PMObj,
             layerInteractedWith: closestLayer.layer // for lack of a better property name
         };
 
@@ -77,7 +78,7 @@ var SnapMixin = {
                 // if yes, save it and fire the pm:snap event
                 this._snapLatLng = snapLatLng;
                 marker.fire('pm:snap', eventInfo);
-                this._poly.fire('pm:snap', eventInfo);
+                PMObj.fire('pm:snap', eventInfo);
             }
 
         } else {
@@ -91,7 +92,7 @@ var SnapMixin = {
 
                 // and fire unsnap event
                 eventInfo.marker.fire('pm:unsnap', eventInfo);
-                this._poly.fire('pm:unsnap', eventInfo);
+                PMObj.fire('pm:unsnap', eventInfo);
             }
         }
     },
@@ -99,8 +100,8 @@ var SnapMixin = {
     // we got the point we want to snap to (C), but we need to check if a coord of the polygon
     // receives priority over C as the snapping point. Let's check this here
     _checkPrioritiySnapping: function(closestLayer) {
-
-        let map = this._poly._map;
+        let PMObj = this._poly || this._line;
+        let map = PMObj._map;
 
         // A and B are the points of the closest segment to P (the marker position we want to snap)
         let A = closestLayer.segment[0];
@@ -139,12 +140,12 @@ var SnapMixin = {
 
     },
     _createSnapList: function() {
-
+        let PMObj = this._poly || this._line;
         let layers = [];
         let debugIndicatorLines = [];
 
         // find all layers that are or inherit from Polylines...
-        this._poly._map.eachLayer((layer) => {
+        PMObj._map.eachLayer((layer) => {
             if(layer instanceof L.Polyline) {
                 layers.push(layer);
 
@@ -158,13 +159,14 @@ var SnapMixin = {
         });
 
         // ...except myself
-        layers = layers.filter((layer) => this._poly !== layer);
+        layers = layers.filter((layer) => PMObj !== layer);
 
         this._snapList = layers;
         this.debugIndicatorLines = debugIndicatorLines;
     },
     _calcClosestLayer: function(latlng, layers) {
-        let map = this._poly._map;
+        let PMObj = this._poly || this._line;
+        let map = PMObj._map;
 
         // the closest polygon to our dragged marker latlng
         let closestLayer = {};
@@ -193,13 +195,14 @@ var SnapMixin = {
 
     },
     _calcLayerDistances: function(latlng, layer) {
-        let map = this._poly._map;
+        let PMObj = this._poly || this._line;
+        let map = PMObj._map;
 
         // the point P which we want to snap (probpably the marker that is dragged)
         let P = latlng;
 
         // the coords of the layer
-        let coords = layer.getLatLngs()[0];
+        let coords = this._poly ? layer.getLatLngs()[0] : layer.getLatLngs();
 
         // the closest segment (line between two points) of the layer
         let closestSegment;
@@ -258,4 +261,4 @@ var SnapMixin = {
     _getDistance: function (map, latlngA, latlngB) {
         return map.latLngToLayerPoint(latlngA).distanceTo(map.latLngToLayerPoint(latlngB));
     }
-}
+};

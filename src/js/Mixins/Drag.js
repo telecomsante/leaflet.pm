@@ -3,21 +3,23 @@ var DragMixin = {
         // temporary coord variable for delta calculation
         this._tempDragCoord;
 
+        let PMObj = this._poly || this._line;
+      
         // add CSS class
-        var el = this._poly._path;
+        var el = PMObj._path;
         L.DomUtil.addClass(el, 'leaflet-pm-draggable');
 
 
         var onMouseUp = (e) => {
 
             // re-enable map drag
-            this._poly._map.dragging.enable();
+            PMObj._map.dragging.enable();
 
             // clear up mousemove event
-            this._poly._map.off('mousemove');
+            PMObj._map.off('mousemove');
 
             // clear up mouseup event
-            this._poly.off('mouseup');
+            PMObj.off('mouseup');
 
             // show markers again
             this._initMarkers();
@@ -30,13 +32,13 @@ var DragMixin = {
                 L.DomUtil.removeClass(el, 'leaflet-pm-dragging');
 
                 // fire pm:dragend event
-                this._poly.fire('pm:dragend');
+                PMObj.fire('pm:dragend');
 
                 // fire edit
                 this._fireEdit();
             }, 10);
 
-        }
+        };
 
 
         var onMouseMove = (e) => {
@@ -48,34 +50,34 @@ var DragMixin = {
                 L.DomUtil.addClass(el, 'leaflet-pm-dragging');
 
                 // bring it to front to prevent drag interception
-                this._poly.bringToFront();
+                PMObj.bringToFront();
 
                 // disbale map drag
-                this._poly._map.dragging.disable();
+                PMObj._map.dragging.disable();
 
                 // hide markers
                 this._markerGroup.clearLayers();
 
                 // fire pm:dragstart event
-                this._poly.fire('pm:dragstart');
+                PMObj.fire('pm:dragstart');
 
 
             }
 
             this._onLayerDrag(e);
 
-        }
+        };
 
-        this._poly.on('mousedown', (e) => {
+        PMObj.on('mousedown', (e) => {
 
             // save for delta calculation
             this._tempDragCoord = e.latlng;
 
-            this._poly.on('mouseup', onMouseUp);
+            PMObj.on('mouseup', onMouseUp);
 
             // listen to mousemove on map (instead of polygon),
             // otherwise fast mouse movements stop the drag
-            this._poly._map.on('mousemove', onMouseMove);
+            PMObj._map.on('mousemove', onMouseMove);
 
         });
     },
@@ -84,7 +86,7 @@ var DragMixin = {
     },
 
     _onLayerDrag: function(e) {
-
+        let PMObj = this._poly || this._line;
         // latLng of mouse event
         let latlng = e.latlng;
 
@@ -95,7 +97,7 @@ var DragMixin = {
         };
 
         // create the new coordinates array
-        let coords = this._poly._latlngs[0];
+        let coords = PMObj._latlngs[0];
         let newLatLngs = coords.map((currentLatLng) => {
             return {
                 lat: currentLatLng.lat + deltaLatLng.lat,
@@ -104,13 +106,12 @@ var DragMixin = {
         });
 
         // set new coordinates and redraw
-        this._poly.setLatLngs(newLatLngs).redraw();
+        PMObj.setLatLngs(newLatLngs).redraw();
 
         // save current latlng for next delta calculation
         this._tempDragCoord = latlng;
 
         // fire pm:dragstart event
-        this._poly.fire('pm:drag');
-
+        PMObj.fire('pm:drag');
     },
-}
+};
