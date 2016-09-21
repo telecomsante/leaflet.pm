@@ -46,7 +46,7 @@ gulp.task('styles', function() {
         'src/css/**/*.css'
     ])
     .pipe(concatCss('leaflet.pm.css'))
-    .pipe(gulp.dest('dist/'));
+    .pipe(gulp.dest('dist/css'));
 });
 
 gulp.task('assets', function() {
